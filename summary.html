@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Evaluation Summary</title>
+
+<style>
+body { margin:0; padding:20px; background:#9ceba9; font-family:Arial, sans-serif; }
+.container { background:#fff; padding:30px; border-radius:12px; max-width:900px; margin:auto; }
+h2, h3 { margin-top:30px; }
+table { width:100%; border-collapse:collapse; margin-top:10px; }
+th, td { border:1px solid #ccc; padding:8px; vertical-align:top; }
+th { background:#f2f2f2; text-align:center; }
+.left { text-align:left; }
+.center { text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Faculty Evaluation Summary</h2>
+    <p><b>Student Name:</b> {{ name }}</p>
+    <p><b>Year and Section:</b> {{ section }}</p>
+    <p><b>Teacher Evaluated:</b> {{ teacher }}</p>
+    <p><b>Overall Average Rating (1-5):</b> {{ overall_average_rating }}</p>
+    <p><b>Overall Interpretation:</b> {{ overall_interpretation }}</p>
+
+{% set sections = [
+    "Instruction and discussion facilitation refer to sharing control and direction with students.",
+    " Commitment refers to the course specialist's act or quality of fulfilling responsibility giving the dedication, discipline, maturity for the learner's
+development and advancement.",
+    "Teaching for independent learning pertains to the course specialist's ability to organize teaching-learning process to enable learners to maximize their potentials.",
+    "Use of instructional materials and other educational resources to help maximize learning."
+] %}
+
+{% set questions = [
+    [ "Demonstrates sensitivity to students' abilities to attend and absorb content information.",
+    "Integrates sensitively his/her learning objectives into those of the students in a collaborative process.",
+    "Makes himself/herself available to students beyond official time.",
+    "Regularly comes to class on time; well-groomed and well-prepared to complete assigned responsibilities.",
+    "Keeps accurate records of students' performance and promptly submits the same."],
+     
+    ["Demonstrates mastery of the subject matter (explains the subject matter without relying solely on the prescribed textbook).",
+    "Draws and shares information on the state-of-the-art theories and practices in his/her discipline.",
+    "Integrates subjects into practical circumstances and learning intents/purposes of students.",
+    "Explains the relevance of present topics to previous lessons and relates the subject matter to relevant current issues and/or daily life activities.",
+    "Demonstrates up-to-date knowledge and/or awareness of current trends and issues in the subjects."],
+     
+    ["Creates strategies that allow students to practice using concepts they need to understand (interactive discussion).",
+    "Enhances students' self-esteem and/or gives due recognition to students' performance/potentials.",
+    "Allows students to create their own course objectives, realistically defines student-professor rules, and makes them accountable to their performance.",
+    "Allows students to think independently, make their own decisions, and holds them accountable for their performance based largely on their success in executing decisions.",
+    "Encourages students to learn beyond what is required and guides them on how to apply the concepts learned."],
+     
+    ["Creates opportunities for intensive and/or extensive contribution of students in the class activities (e.g., breaks class into dyads, triads, or buzz/task groups).",
+    "Assumes roles as facilitator, resource person, coach, inquisitor, integrator, referee, in drawing students to contribute to knowledge and understanding of the concepts at hand.",
+    "Designs and implements learning conditions that promote healthy exchanges and/or confrontations.",
+    "Structures/re-structures learning and teaching-learning contexts to enhance the attainment of collective learning objectives.",
+    "Uses instructional materials (audio/video, fieldtrips, computer-aided instructions etc.) to reinforce learning processes."]
+] %}
+
+{% for s in range(4) %}
+    <h3>Section {{ s+1 }}: {{ sections[s] }}</h3>
+    <table>
+    <tr><th class="left">Question</th><th>Rating</th><th>Interpretation</th></tr>
+
+{% for q in range(5) %}
+<tr>
+    <td class="left">{{ q + 1 + (s*5) }}. {{ questions[s][q] }}</td>
+    <td class="center">
+        {% if question_results and question_results[q + (s*5)] %}
+            {{ question_results[q + (s*5)]['rating'] }}
+        {% else %}
+            N/A
+        {% endif %}
+    </td>
+    
+    <td class="center">
+        {% if question_results and question_results[q + (s*5)] %}
+            {{ question_results[q + (s*5)]['interpretation'] }}
+        {% else %}
+            N/A
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endfor %}
+
+
+<!-- Comments summary -->
+{% if comments %}
+    <h3>Comments / Feedback</h3>
+    <div style="background:#f9f9f9; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        {{ comments }}
+    </div>
+{% else %}
+
+<h3>Comments / Feedback</h3>
+    <div style="font-style:italic; color:gray;">No comments provided.</div>
+{% endif %}
+
+<!-- Add dashboard link at the end -->
+<div style="margin-top:30px; text-align:center;">
+    <a href="{{ url_for('dashboard') }}" style="color:#1e7f3b; text-decoration:none; font-weight:bold;">View Dashboard</a>
+</div>
+
+</div>
+</body>
+</html>

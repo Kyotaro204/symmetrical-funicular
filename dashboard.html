@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Dashboard</title>
+    <style>
+        body { margin:0; padding:20px; background:#9ceba9; font-family:Arial, sans-serif; }
+        .container { background:#fff; padding:30px; border-radius:12px; max-width:1200px; margin:auto; }
+        h2 { margin-top:0; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th, td { border:1px solid #ccc; padding:10px; text-align:left; }
+        th { background:#f2f2f2; }
+        .center { text-align:center; }
+        
+        /* Print-specific styles */
+        @media print {
+            body { background: white; margin: 0; padding: 10px; }
+            .container { background: white; padding: 0; border-radius: 0; max-width: none; margin: 0; }
+            .no-print { display: none; }  /* Hide elements not needed in print */
+            h2 { page-break-after: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Faculty Evaluation Dashboard</h2>
+    
+    <!-- Add Print Button -->
+    <div style="margin-bottom: 20px; text-align: right;">
+        <button onclick="window.print()" style="background: #1e7f3b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Print Dashboard</button>
+    </div>
+    
+    {% if dashboard_data %}
+        <table>
+            <tr>
+                <th>Teacher Name</th>
+                <th class="center">Number of Students</th>
+                <th class="center">Final Average Rating (1-5)</th>
+                <th>Sections of Evaluators</th>
+                <th>Interpretation</th>
+            </tr>
+            {% for data in dashboard_data %}
+            <tr>
+                <td>{{ data.teacher }}</td>
+                <td class="center">{{ data.num_students }}</td>
+                <td class="center">{{ data.final_average_rating }}</td>
+                <td>{{ data.sections }}</td>
+                <td>{{ data.interpretation }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No evaluations submitted yet.</p>
+    {% endif %}
+    
+    <!-- Hide this link in print view -->
+    <div class="no-print" style="margin-top:30px; text-align:center;">
+        <a href="{{ url_for('logout') }}" style="color:#1e7f3b; text-decoration:none; font-weight:bold; margin-right:20px;">Logout</a>
+        <a href="{{ url_for('index') }}" style="color:#1e7f3b; text-decoration:none; font-weight:bold;">Back to Home</a>
+    </div>
+</div>
+
+</body>
+</html>

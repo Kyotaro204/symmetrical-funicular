@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maragondon National High School</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #9ceba9;
+            font-family: Arial, sans-serif;
+        }
+         .container {
+            text-align: center;
+            background: white;
+            padding: 30px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 400px;
+        }
+
+        img {
+            width: 150px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 5px 0 10px 0;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 40px;
+            font-weight: normal;
+        }
+
+        button {
+            background: #1e7f3b;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #16632d;
+        }
+
+        /* New style for admin link */
+        .admin-link {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .admin-link a {
+            color: #1e7f3b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Logo -->
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="School Logo">
+
+    <!-- School Name and Title -->
+    <h1>MARAGONDON NATIONAL HIGH SCHOOL</h1>
+    <h2><i>Faculty Evaluation</i></h2> 
+   
+    <!-- Input Form -->
+<form action="/evaluation" method="POST" class="form">
+    <div style="margin-bottom:20px; text-align:left;">
+        <label for="name"><b>Your Name:</b></label><br>
+        <div align="center">
+            <input type="text" name="name" id="name" placeholder="Enter your name" required style="width:90%; padding:10px; margin-top:5px; display:block;">
+        </div>
+    </div>
+
+    <div style="margin-bottom:20px; text-align:left;">
+        <label for="section"><b>Year and Section:</b></label><br>
+        <div align="center">
+            <input type="text" name="section" id="section" placeholder="Enter your Year and Section" required style="width:90%; padding:10px; margin-top:5px;">
+        </div>
+    </div>
+
+    <div align="center">
+        <button type="submit" class="start-btn">Start Evaluation</button>
+    </div>
+</form>
+
+    <!-- New: Admin Dashboard Link -->
+    <div class="admin-link">
+        <a href="{{ url_for('dashboard') }}">Admin Dashboard</a>
+    </div>
+
+</div>
+
+</body>
+</html>

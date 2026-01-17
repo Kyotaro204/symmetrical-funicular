@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluation Form</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #9ceba9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 750px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-size: 16px;
+            margin: 5px 0 5px 0;
+        }
+
+        h3 {
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #d3d3d3;
+        }
+
+        th, td {
+            padding: 6px;
+            text-align: center;
+        }
+
+        th.question {
+            text-align: left;
+        }
+
+        .section {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        width: 100%;
+        }
+
+        .active { 
+            position: static; left: 0; 
+        }
+        
+        label {
+            margin-right: 10px;
+            display: inline-block;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .radio-group {
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #1e7f3b;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #16632d;
+        }
+
+        .teacher-display {
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <form action="/submit" method="POST">
+        <input type="hidden" name="name" value="{{ name }}">
+        <input type="hidden" name="section" value="{{ section }}">
+        <!-- Removed the hidden input for teacher to fix the issue -->
+
+    <!-- SECTION 1 -->
+<div class="section active" id="section1">
+    <!-- Name and Section -->
+    <div style="text-align:left; margin-bottom:10px; font-weight:bold;">
+        Student Name: {{ name }} | Section: {{ section }}
+    </div>
+
+    <!-- Select Teacher -->
+    <div style="text-align:left; margin-bottom:20px;">
+        <label for="teacher"><b>Select Teacher:</b></label><br>
+        <select name="teacher" id="teacher" required style="width:100%; padding:8px; margin-top:5px;">
+            <option value="" disabled selected style="color: gray;">-- Select Teacher --</option>
+            <option value="Normilet Evangelista">Normilet Evangelista</option>
+            <option value="Clifford Togonon">Clifford Togonon</option>
+            <option value="Darl Angala">Darl Angala</option>
+            <option value="Janice Noda">Janice Noda</option>
+            <option value="Jem Samala">Jem Samala</option>
+        </select>
+    </div>
+
+    <!-- SCALE TABLE -->
+    <table>
+        <tr>
+            <th><b>Scale</b></th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+        </tr>
+        <tr>
+            <td><b>Range</b></td>
+            <td>20-30.9999</td>
+            <td>31-50.9999</td>
+            <td>51-70.9999</td>
+            <td>71-90.9999</td>
+            <td>91-100</td>
+        </tr>
+        <tr>
+            <td>Qualitative</td>
+            <td>Poor (P)</td>
+            <td>Fair (F)</td>
+            <td>Satisfactory (S)</td>
+            <td>Very Satisfactory (VS)</td>
+            <td>Outstanding (O)</td>
+        </tr>
+    </table>
+
+    <!-- SECTION 1 QUESTIONS -->
+    <h2>Section 1: Instruction and discussion facilitation refer to sharing control and direction with students.</h2>
+
+       {% set questions1 = [
+        "Demonstrates sensitivity to students' abilities to attend and absorb content information.",
+        "Integrates sensitively his/her learning objectives into those of the students in a collaborative process.",
+        "Makes himself/herself available to students beyond official time.",
+        "Regularly comes to class on time; well-groomed and well-prepared to complete assigned responsibilities.",
+        "Keeps accurate records of students' performance and promptly submits the same."
+        ] %}
+
+<table style="width:100%; border-collapse: collapse; margin-top:15px;">
+    <tr>
+        <th style="text-align:left; width:70%;">Questions</th>
+        <th>5</th>
+        <th>4</th>
+        <th>3</th>
+        <th>2</th>
+        <th>1</th>
+    </tr>
+
+    {% for i in range(5) %}
+    <tr>
+        <!-- Allow the text to wrap and not break HTML -->
+        <td style="text-align:left; padding:8px; vertical-align:top;">{{ i+1 }}. {{ questions1[i] }}</td>
+        {% for r in range(5,0,-1) %}
+        <td style="text-align:center; padding:8px;">
+            <input type="radio" name="q{{ i+1 }}" value="{{ r }}" required>
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+    <button type="button" onclick="nextSection(2)">Next →</button>
+</div>
+
+
+<!-- SECTION 2 -->
+<div class="section" id="section2">
+
+    <div class="teacher-display" style="text-align:left; margin-bottom:10px; font-weight:bold;">Teacher Evaluated: <span id="teacher-display"></span></div>
+            <h2>Section 2: Commitment refers to the course specialist's act or quality of fulfilling responsibility giving the dedication, discipline, maturity for the learner's
+development and advancement. </h2>
+
+        {% set questions2 = [
+        "Demonstrates mastery of the subject matter (explains the subject matter without relying solely on the prescribed textbook).",
+        "Draws and shares information on the state-of-the-art theories and practices in his/her discipline.",
+        "Integrates subjects into practical circumstances and learning intents/purposes of students.",
+        "Explains the relevance of present topics to previous lessons and relates the subject matter to relevant current issues and/or daily life activities.",
+        "Demonstrates up-to-date knowledge and/or awareness of current trends and issues in the subjects."
+        ] %}
+
+<table style="width:100%; border-collapse: collapse; margin-top:15px;">
+    <tr>
+        <th style="text-align:left; width:70%;">Questions</th>
+        <th>5</th>
+        <th>4</th>
+        <th>3</th>
+        <th>2</th>
+        <th>1</th>
+    </tr>
+
+    {% for i in range(5) %}
+    <tr>
+        <td style="text-align:left; padding:8px; vertical-align:top;">{{ i+6 }}. {{ questions2[i] }}</td>
+        {% for r in range(5,0,-1) %}
+        <td style="text-align:center; padding:8px;">
+            <input type="radio" name="q{{ i+6 }}" value="{{ r }}" required>
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+            <button type="button" onclick="prevSection(1)">← Previous</button>
+            <button type="button" onclick="nextSection(3)">Next →</button>
+        </div>
+
+<!-- SECTION 3 -->
+<div class="section" id="section3">
+
+    <div class="teacher-display">Teacher Evaluated: <span id="teacher-display"></span></div>
+            <h2>Section 3: Teaching for independent learning pertains to the course specialist's ability to organize teaching-learning process to enable learners to maximize their potentials.
+</h2>
+
+        {% set questions3 = [
+        "Creates strategies that allow students to practice using concepts they need to understand (interactive discussion).",
+        "Enhances students' self-esteem and/or gives due recognition to students' performance/potentials.",
+        "Allows students to create their own course objectives, realistically defines student-professor rules, and makes them accountable to their performance.",
+        "Allows students to think independently, make their own decisions, and holds them accountable for their performance based largely on their success in executing decisions.",
+        "Encourages students to learn beyond what is required and guides them on how to apply the concepts learned."
+        ] %}
+
+<table style="width:100%; border-collapse: collapse; margin-top:15px;">
+    <tr>
+        <th style="text-align:left; width:70%;">Questions</th>
+        <th>5</th>
+        <th>4</th>
+        <th>3</th>
+        <th>2</th>
+        <th>1</th>
+    </tr>
+
+    {% for i in range(5) %}
+    <tr>
+        <td style="text-align:left; padding:8px; vertical-align:top;">{{ i+11 }}. {{ questions3[i] }}</td>
+        {% for r in range(5,0,-1) %}
+        <td style="text-align:center; padding:8px;">
+            <input type="radio" name="q{{ i+11 }}" value="{{ r }}" required>
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+            <button type="button" onclick="prevSection(2)">← Previous</button>
+            <button type="button" onclick="nextSection(4)">Next →</button>
+        </div>
+
+<!-- SECTION 4 -->
+<div class="section" id="section4">
+
+    <div class="teacher-display">Teacher Evaluated: <span id="teacher-display"></span></div>
+            <h2>Section 4: Use of instructional materials and other educational resources to help maximize learning.</h2>
+
+        {% set questions4 = [
+        "Creates opportunities for intensive and/or extensive contribution of students in the class activities (e.g., breaks class into dyads, triads, or buzz/task groups).",
+        "Assumes roles as facilitator, resource person, coach, inquisitor, integrator, referee, in drawing students to contribute to knowledge and understanding of the concepts at hand.",
+        "Designs and implements learning conditions that promote healthy exchanges and/or confrontations.",
+        "Structures/re-structures learning and teaching-learning contexts to enhance the attainment of collective learning objectives.",
+        "Uses instructional materials (audio/video, fieldtrips, computer-aided instructions etc.) to reinforce learning processes"
+        ] %}
+
+<table style="width:100%; border-collapse: collapse; margin-top:15px;">
+    <tr>
+        <th style="text-align:left; width:70%;">Questions</th>
+        <th>5</th>
+        <th>4</th>
+        <th>3</th>
+        <th>2</th>
+        <th>1</th>
+    </tr>
+
+    {% for i in range(5) %}
+    <tr>
+        <td style="text-align:left; padding:8px; vertical-align:top;">{{ i+16 }}. {{ questions4[i] }}</td>
+        {% for r in range(5,0,-1) %}
+        <td style="text-align:center; padding:8px;">
+            <input type="radio" name="q{{ i+16 }}" value="{{ r }}" required>
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+    <h3>Comments</h3>
+        <textarea name="comments" rows="4"></textarea>
+
+        <button type="button" onclick="prevSection(3)">← Previous</button>
+        <button type="submit">Submit Evaluation</button>
+    </div>
+
+    </form>
+</div>
+
+<script>
+function nextSection(num) {
+    // Update teacher display in sections 2-4
+    const teacher = document.getElementById('teacher').value;
+    if(teacher) {
+        document.querySelectorAll('#section2 #teacher-display, #section3 #teacher-display, #section4 #teacher-display')
+            .forEach(el => el.textContent = teacher);
+    }
+
+    // Show next section
+    for(let i=1;i<=4;i++){
+        document.getElementById('section'+i).classList.remove('active');
+    }
+    document.getElementById('section'+num).classList.add('active');
+    window.scrollTo(0,0);
+}
+
+function prevSection(num){
+    nextSection(num);
+}
+</script>
+
+</body>
+</html>

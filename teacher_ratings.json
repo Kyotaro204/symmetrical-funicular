@@ -1,0 +1,16 @@
+{
+    "": {
+        "num_students": 1,
+        "total_score": 20.0,
+        "average_score": 20.0,
+        "evaluations": [
+            {
+                "student_name": "Benuel Balanlayos",
+                "year_section": "DIT-2-1",
+                "avg_rating": 20.0,
+                "interpretation": "Poor",
+                "comments": ""
+            }
+        ]
+    }
+}
